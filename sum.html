@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>С Днём Рождения, Сания!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #fff1eb, #ace0f9);
+      color: #000;
+      overflow: hidden;
+    }
+
+    .container {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      backdrop-filter: blur(6px);
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 700px;
+      box-shadow: 0 0 30px rgba(255,255,255,0.2);
+      animation: popIn 1s ease;
+    }
+
+    h1 {
+      font-family: 'Pacifico', cursive;
+      font-size: 3em;
+      color: #ff9aaf;
+      text-shadow: 0 0 15px #ff9aaf;
+      animation: neonPulse 2s infinite ease-in-out;
+    }
+
+    .subtitle {
+      font-size: 1.2em;
+      color: #000;
+      margin-bottom: 1em;
+    }
+
+    .text {
+      font-size: 1.2em;
+      line-height: 1.6em;
+      color: #000;
+      margin-bottom: 1em;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 1em;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 1em;
+    }
+
+    .surprise-btn {
+      background: url('gift.jpg') no-repeat center/cover;
+      width: 70px;
+      height: 70px;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(255,255,255,0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+    }
+
+    .surprise-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 20px rgba(255,255,255,0.6);
+    }
+
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      color: #333;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 40px rgba(255,255,255,0.4);
+      z-index: 999;
+      max-width: 80%;
+      display: none;
+      animation: fadeInPop 0.5s ease forwards;
+      font-size: 1.3em;
+    }
+
+    @keyframes neonPulse {
+      0%, 100% { text-shadow: 0 0 15px #ff9aaf; }
+      50% { text-shadow: 0 0 30px #ffb3c6; }
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.7); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes fadeInPop {
+      from { opacity: 0; transform: scale(0.8) translate(-50%, -50%); }
+      to { opacity: 1; transform: scale(1) translate(-50%, -50%); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="card">
+    <h1>С Днём Рождения, Сания!</h1>
+    <div class="subtitle">Нажми на подарочки, чтобы получить сюрпризы 🎁</div>
+    <div class="text">Ты — как праздник сама по себе. Красота, свет и радость 🌟</div>
+    <div class="buttons">
+      <button class="surprise-btn" onclick="showPopup(0)" title="Сюрприз 1"></button>
+      <button class="surprise-btn" onclick="showPopup(1)" title="Сюрприз 2"></button>
+      <button class="surprise-btn" onclick="showPopup(2)" title="Сюрприз 3"></button>
+    </div>
+  </div>
+</div>
+
+<div class="popup" id="popup"></div>
+
+<script>
+  const messages = [
+    "🎈 Ты уникальна и неповторима! Продолжай светить как солнце!",
+    "🎶 Пусть в жизни будет музыка, танцы и только добрые люди рядом!",
+    "💛 Сегодня твой день — и весь мир немного ярче именно благодаря тебе!"
+  ];
+
+  const confetti = () => {
+    const duration = 2 * 1000;
+    const animationEnd = Date.now() + duration;
+    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 1000 };
+
+    function randomInRange(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    const interval = setInterval(function () {
+      const timeLeft = animationEnd - Date.now();
+
+      if (timeLeft <= 0) {
+        return clearInterval(interval);
+      }
+
+      confettiLibrary({
+        particleCount: 50,
+        origin: {
+          x: randomInRange(0.1, 0.9),
+          y: Math.random() - 0.2
+        },
+        ...defaults
+      });
+    }, 250);
+  }
+
+  function showPopup(index) {
+    const popup = document.getElementById('popup');
+    popup.innerText = messages[index];
+    popup.style.display = 'block';
+    setTimeout(() => popup.style.display = 'none', 6000);
+    if (window.confettiLibrary) confetti();
+  }
+
+  // загрузка внешней библиотеки конфетти
+  const script = document.createElement('script');
+  script.src = "https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js";
+  script.onload = () => { window.confettiLibrary = window.confetti };
+  document.head.appendChild(script);
+</script>
+
+</body>
+</html>
